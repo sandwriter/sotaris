@@ -41,3 +41,19 @@ class AnagramProblemFactory(object):
     @staticmethod
     def get_filter_fn(difficulty):
         return lambda entry: (difficulty - 1) * 3 <= len(entry[0]) < difficulty * 3
+
+    def nearest_unsolvable(self, phrase):
+        def next_char(c):
+            return chr(ord(c) + 1)
+
+        def is_valid_alphabet(c):
+            return 'A' <= c <= 'z'
+
+        phrase_chars = list(phrase)
+        for index in range(len(phrase)):
+            new_char = next_char(phrase_chars[index])
+            if is_valid_alphabet(new_char):
+                new_phrase = ''.join(sorted(phrase[:index] + [new_char] + phrase[index + 1]))
+                if new_phrase not in self._solution_map:
+                    return new_phrase
+        return ''
